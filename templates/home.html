@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booklet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right top, #dfe9f3, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      padding: 40px 20px;
+      color: #1f1f1f;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 90%;
+      max-width: 1000px;
+      padding: 30px;
+      margin: 20px auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .nav {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .nav a {
+        text-decoration: none;
+        padding: 12px 25px;
+        margin: 0 10px;
+        background: rgba(0, 123, 255, 0.15);
+        border-radius: 30px;
+        color: #0056b3;
+        font-weight: 500;
+        transition: 0.3s;
+        border: 1px solid rgba(0, 123, 255, 0.2);
+    }
+
+    .nav a:hover {
+        background: rgba(0, 123, 255, 0.3);
+        transform: scale(1.05);
+        color: #003d80;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .toolbar button, .toolbar select {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(0, 123, 255, 0.15);
+        color: #0056b3;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 123, 255, 0.2);
+    }
+
+    .toolbar button:hover, .toolbar select:hover {
+        background: rgba(0, 123, 255, 0.3);
+        color: #003d80;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+
+    #editor {
+      min-height: 350px;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.1);
+      color: #2c3e50;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #editor:empty:before {
+        content: attr(data-placeholder);
+        color: #111010;
+        font-style: italic;
+        pointer-events: none;
+    }
+
+    footer {
+      margin-top: 30px;
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="glass">
+    <div class="nav">
+      <a href="signUp.html">Sign Up</a>
+      <a href="from.html">Sign In</a>
+    </div>
+
+    <div class="toolbar">
+      <button onclick="formatText('bold')">Bold</button>
+      <button onclick="formatText('italic')">Italic</button>
+      <button onclick="formatText('underline')">Underline</button>
+      <select onchange="changeFontSize(this.value)">
+        <option value="">Font Size</option>
+        <option value="1">Small</option>
+        <option value="3">Medium</option>
+        <option value="5">Large</option>
+      </select>
+      <button onclick="insertHeading('h1')">H1</button>
+      <button onclick="insertHeading('h2')">H2</button>
+      <button onclick="saveFile()">Save</button>
+      <button onclick="saveAs()">Save As</button>
+      <button onclick="openFile()">Open File</button>
+      <input type="file" id="fileInput" class="hidden-input" accept=".txt" onchange="readFile(this)">
+    </div>
+
+    <div id="editor" contenteditable="true" data-placeholder="Start typing your notes here...">
+        
+    </div>
+
+  </div>
+
+  <footer>
+    &copy; 2025 Abdul Rehman. All rights reserved.
+  </footer>
+
+  <script>
+    function formatText(command) {
+      document.execCommand(command, false, null);
+    }
+
+    function changeFontSize(size) {
+      document.execCommand('fontSize', false, size);
+    }
+
+    function insertHeading(tag) {
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
+      const range = selection.getRangeAt(0);
+      const el = document.createElement(tag);
+      el.textContent = selection.toString();
+      range.deleteContents();
+      range.insertNode(el);
+      selection.removeAllRanges();
+    }
+
+    function saveFile() {
+      const content = document.getElementById("editor").innerText;
+      downloadFile("note.txt", content);
+    }
+
+    function saveAs() {
+      const content = document.getElementById("editor").innerText;
+      const fileName = prompt("Enter file name", "note.txt");
+      if (fileName) {
+        downloadFile(fileName, content);
+      }
+    }
+
+    function openFile() {
+      document.getElementById("fileInput").click();
+    }
+
+    function readFile(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("editor").innerText = e.target.result;
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    function downloadFile(name, content) {
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = name;
+      link.click();
+    }
+  </script>
+</body>
+</html>
