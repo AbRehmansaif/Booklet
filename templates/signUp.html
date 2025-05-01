@@ -1,69 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        form {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 300px;
-        }
+    body {
+      height: 100vh;
+      background-color: #e6f0ff;
+      /* background: linear-gradient(135deg, #e0eafc, #cfdef3); */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .container {
+        background-color: #fff;
+      /* background: rgba(255, 255, 255, 0.2); */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 30px 25px;
+      border-radius: 15px;
+      width: 320px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
 
-        h3 {
-            margin: 10px 0 5px;
-        }
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .container input[type="text"],
+    .container input[type="email"],
+    .container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: rgba(255, 255, 255, 0.6);
+    }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+    .container .terms {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 15px;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .container .terms input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .container button:hover {
+      background-color: #0056b3;
+    }
+
+    .container .login-link {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .container .login-link a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .container .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
+
 <body>
-    <form action="">
-        <h1>Sign Up</h1>
-        <h3>Name</h3>
-        <input type="text" name="" id="">
-        <h3>Password</h3>
-        <input type="password" name="" id="">
-        <button>Sign Up</button>
-    </form>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li style="color: {% if category == 'error' %}red{% else %}green{% endif %};">
+              {{ message }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('sign_up') }}">
+    <div class="container">
+      <h2>Registration</h2>
+      <input type="text" name="name" placeholder="Enter your name" required>
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <!-- Email input is optional unless stored in the DB -->
+      <!-- <input type="email" name="email" placeholder="Enter your email" required> -->
+      <input type="password" name="password" placeholder="Create password" required>
+      <!-- Confirm password only for client-side JS or further validation -->
+
+      <div class="terms">
+        <input type="checkbox" required>
+        <label>I accept all terms & conditions</label>
+      </div>
+
+      <button type="submit">Register Now</button>
+
+      <div class="login-link">
+        Already have an account? <a href="{{ url_for('sign_in') }}">Login now</a>
+      </div>
+    </div>
+  </form>
 </body>
 </html>

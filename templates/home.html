@@ -131,9 +131,10 @@
 </head>
 <body>
   <div class="glass">
+    <h1>Welcome, {{ username }}!</h1>
     <div class="nav">
       <a href="signUp.html">Sign Up</a>
-      <a href="from.html">Sign In</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
     </div>
 
     <div class="toolbar">
