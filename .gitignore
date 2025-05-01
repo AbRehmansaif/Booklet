@@ -1,0 +1,61 @@
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask instance folder
+instance/
+
+# Flask config files
+*.env
+*.flaskenv
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Python distribution files
+*.egg
+*.egg-info/
+dist/
+build/
+*.tar.gz
+
+# Log files
+*.log
+
+# Database files (if using SQLite)
+*.db
+
+# Coverage reports
+.coverage
+*.cover
+
+# Test artifacts
+nosetests.xml
+coverage.xml
+*.hypothesis/
+.cache/
+
+# mypy (optional for type checking)
+.mypy_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest cache
+.pytest_cache/
+
+# Docker file or other environment-specific files (optional)
+docker-compose.override.yml
